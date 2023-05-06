@@ -13,10 +13,42 @@ def create_connection(path):
 def init_databases():
     connection = create_connection("")
     cursor = connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS transaction(id INTEGER PRIMARY KEY AUTOINCREMENT, transaction_date TEXT, category INTEGER, account INTEGER, transaction_amount REAL, transaction_comment TEXT)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS account(id INTEGER PRIMARY KEY AUTOINCREMENT, account_name TEXT, type TEXT, starting_account_balance REAL, current_account_balance REAL, account_comment TEXT)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS category(id INTEGER PRIMARY KEY AUTOINCREMENT, category_name TEXT, starting_category_balance REAL, current_category_balance REAL, parent INTEGER, is_hidden BOOLEAN)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS category_transfer(id INTEGER PRIMARY KEY AUTOINCREMENT, transfer_date TEXT, category_from INTEGER, category_to INTEGER, transfer_amount REAL)")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS transaction(
+        transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        transaction_date TEXT, 
+        transaction_category INTEGER, 
+        account_from INTEGER, 
+        transaction_amount REAL, 
+        transaction_comment TEXT,
+        FOREIGN KEY(account_from) REFERENCES account(account_id),
+        FOREIGN KEY(transaction_category) REFERENCES category(category_id))
+        """)
+    cursor.execute("""CREATE TABLE IF NOT EXISTS account(
+        account_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        account_name TEXT, 
+        type TEXT, 
+        starting_account_balance REAL, 
+        current_account_balance REAL, 
+        account_comment TEXT)
+        """)
+    cursor.execute("""CREATE TABLE IF NOT EXISTS category(
+        category_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        category_name TEXT, 
+        starting_category_balance REAL, 
+        current_category_balance REAL, 
+        parent INTEGER, 
+        is_hidden BOOLEAN,
+        FOREIGN KEY(parent) REFERENCES category(category_id))
+        """)
+    cursor.execute("""CREATE TABLE IF NOT EXISTS category_transfer(
+        transfer_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        transfer_date TEXT, 
+        category_from INTEGER, 
+        category_to INTEGER, 
+        transfer_amount REAL,
+        FOREIGN KEY(category_from) REFERENCES category(category_id),
+        FOREIGN KEY(category_to) REFERENCES category(category_id))
+        """)
 
 def add_entry(cursor, table_name, data_string):
     return 0
