@@ -1,0 +1,19 @@
+# Budget config file
+---
+parent_categories:
+  - name: shared_expenses
+    children:
+      - name: groceries
+        budgeted: 100.00
+      - name: coffee
+        budgeted: 25.00
+  - name: my_expenses
+    children:
+      - name: going_out
+        budget: 50.00
+      - name: clothes
+        budget: 25.00
+...
+      
+
+  

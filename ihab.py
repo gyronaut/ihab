@@ -1,4 +1,5 @@
 # import PyQt5
+import yaml
 import sqlite3
 from sqlite3 import Error
 
@@ -57,7 +58,10 @@ def make_transaction(db, date, category, account, amount, comments):
     connection = create_connection(db)
     cursor = connection.cursor()
     try:
-        cursor.execute('INSERT INTO ledger (transaction_date, transaction_category, account_from, transaction_amount, transaction_comment) VALUES (?, ?, ?, ?, ?)', data)
+        cursor.execute('INSERT INTO ledger (transaction_date, transaction_category,'
+            'account_from, transaction_amount, transaction_comment)'
+            'VALUES (?, ?, ?, ?, ?)'
+            , data)
     except Error as e:
         print(e)
     connection.commit()
@@ -68,20 +72,24 @@ def make_category_transfer(db, date, category_from, category_to, amount):
     connection = create_connection(db)
     cursor = connection.cursor()
     try:
-        cursor.execute('INSERT INTO category_transfers (transfer_date, category_from, category_to, transfer_amount) VALUES (?, ?, ?, ?)', data)
+        cursor.execute('INSERT INTO category_transfers (transfer_date, category_from,'
+            'category_to, transfer_amount)'
+            'VALUES (?, ?, ?, ?)', data)
     except Error as e:
         print(e)
     connection.commit()
     connection.close()
 
-def create_account(db, name, account_type, starting_balance, comments):
-    data = (name, account_type, starting_balance, starting_balance, comments)
+def create_account(db, name, account_type, starting_balance, current_balance, comments):
+    data = (name, account_type, starting_balance, current_balance, comments)
     connection = create_connection(db)
     cursor = connection.cursor()
     try:
-        cursor.execute('INSERT INTO categories (category_name, type, starting_account_balance, current_account_balance, account_comment) VALUES (?, ?, ?, ?, ?)', data)
+        cursor.execute('INSERT INTO categories (category_name, type,'
+            'starting_account_balance, current_account_balance, account_comment)'
+            'VALUES (?, ?, ?, ?, ?)', data)
     except Error as e:
-        print(e)
+        print(f"Error {e}")
     connection.commit()
     connection.close()
 
@@ -90,7 +98,9 @@ def create_category(db, name, parent_category, balance):
     connection = create_connection(db)
     cursor = connection.cursor()
     try:
-        cursor.execute('INSERT INTO categories (category_name, starting_category_balance, current_category_balance, parent, is_hidden) VALUES (?, ?, ?, ?, FALSE)', data)
+        cursor.execute('INSERT INTO categories (category_name, starting_category_balance,'
+            'current_category_balance, parent, is_hidden)'
+            'VALUES (?, ?, ?, ?, FALSE)',data)
     except Error as e:
         print(e)
     connection.commit()
@@ -100,21 +110,24 @@ def set_category_is_hidden(db, category_name, is_hidden):
     connection = create_connection(db)
     cursor = connection.cursor()
     cursor.execute("UPDATE categories "
-            "SET is_hidden = ? "
-            "WHERE category_name = ? OR "
-            "( ? AND "
-            "category_id = (SELECT category_id FROM categories WHERE parent = (SELECT category_id FROM categories WHERE category_name = ?)))", (is_hidden, category_name, is_hidden, category_name))
+        "SET is_hidden = ? "
+        "WHERE category_name = ? OR "
+        "( ? AND "
+        "category_id = (SELECT category_id FROM categories "
+        "WHERE parent = (SELECT category_id FROM categories "
+        "WHERE category_name = ?)))", 
+        (is_hidden, category_name, is_hidden, category_name))
     connection.commit()
     connection.close()
-
 
 def make_account_transfer(db, date, account_from, account_to, amount, comments):
     make_transaction(db, date, "transfer", account_from, -1.0*amount, comments)
     make_transaction(db, date, "transfer", account_to, amount, comments)
 
+def setup_budget_from_file(config_file):
+    return 0
 
 init_databases("./test.db")
-#make_transaction("./test.db", "2023-05-06", None, None, 10.0, "test transaction")
 create_category("./test.db", "groceries", None, 100.00)
 create_category("./test.db", "eggs", 1, 20.00)
 set_category_is_hidden("./test.db", "groceries", True)
