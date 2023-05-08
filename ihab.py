@@ -130,7 +130,7 @@ def setup_budget_from_file(config_file):
     print(budget)
     for parent in budget['budget']:
         for child in parent['children']:
-            print(parent['parent_category']+': '+child['category']
+            print(parent['parent_category']+': '+child['category'])
 
 
 init_databases("./test.db")
