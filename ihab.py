@@ -125,15 +125,21 @@ def make_account_transfer(db, date, account_from, account_to, amount, comments):
     make_transaction(db, date, "transfer", account_to, amount, comments)
 
 def setup_budget_from_file(config_file):
-    return 0
+    with open(config_file, 'r') as file:
+        budget = yaml.safe_load(file)
+    print(budget)
+    for parent in budget['budget']:
+        for child in parent['children']:
+            print(parent['parent_category']+': '+child['category']
+
 
 init_databases("./test.db")
-create_category("./test.db", "groceries", None, 100.00)
-create_category("./test.db", "eggs", 1, 20.00)
-set_category_is_hidden("./test.db", "groceries", True)
-set_category_is_hidden("./test.db", "groceries", False)
+#create_category("./test.db", "groceries", None, 100.00)
+#create_category("./test.db", "eggs", 1, 20.00)
+#set_category_is_hidden("./test.db", "groceries", True)
+#set_category_is_hidden("./test.db", "groceries", False)
 connection = create_connection("./test.db");
 cursor = connection.cursor();
 cursor.execute("SELECT * FROM categories");
 print(cursor.fetchall())
-
+setup_budget_from_file("budget.yaml")
