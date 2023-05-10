@@ -1,18 +1,102 @@
 # Budget config file
 ---
 budget:
-  - parent_category: shared_expenses
+  - parent_category: "Shared Expenses"
     children:
-      - category: groceries
+      - category: "Rent"
+        budgeted: 460.00
+      - category: "Utilities"
+        budgeted: 45.00
+      - category: "Fuel"
+        budgeted: 7.00
+      - category: "Internet"
+        budgeted: 24.00
+      - category: "Groceries"
         budgeted: 100.00
-      - category: coffee
-        budgeted: 25.00
-  - parent_category: my_expenses
+      - category: "Restaurants"
+        budgeted: 60.00
+      - category: "House Expenses"
+        budgeted: 8.00
+      - category: "Going Out"
+        budgeted: 35.00
+      - category: "Pet Stuff"
+        budgeted: 20.00
+      - category: "Car Insurance"
+        budgeted: 22.10
+      - category: "Renter's Insurance"
+        budgeted: 4.42
+      - category: "Misc. Expenses"
+        budgeted: 0.00
+  - parent_category: "My Regular Expenses"
     children:
-      - category: going_out
-        budget: 50.00
-      - category: clothes
-        budget: 25.00
+      - category: "My Groceries"
+        budgeted: 0.00
+      - category: "My Restaurants"
+        budgeted: 25.00
+      - category: "Coffee and Snacks"
+        budgeted: 10
+      - category: "My Going Out"
+        budgeted: 0.00
+      - category: "My Misc. Expenses"
+        budgeted: 0.00
+      - category: "Subscriptions"
+        budgeted: 15.00
+  - parent_category: "Fun and Hobbies"
+    children:
+      - category: "Spending Money"
+        budgeted: 50.00
+      - category: "Clothes"
+        budgeted: 50.00
+      - category: "Art Supplies"
+        budgeted: 5.00
+      - category: "Cooking and Brewing"
+        budgeted: 5.00
+  - parent_category: "Irregular Expenses"
+    children:
+      - category: "Personal Care"
+        budgeted: 5.00
+      - category: "Birthdays"
+        budgeted: 15.00
+      - category: "Christmas"
+        budgeted: 33.00
+      - category: "Web Hosting"
+        budgeted: 8.00
+      - category: "Car Registration"
+        budgeted: 0.00
+      - category: "Medical"
+        budgeted: 60.00
+      - category: "Taxes"
+        budgeted: 0.00
+      - category: "Charitable"
+        budgeted: 200.00
+  - parent_category: "Savings"
+    children:
+      - category: "Car Repairs"
+        budgeted: 25.00
+      - category: "Bike Stuff"
+        budgeted: 5.00
+      - category: "Moving Expenses"
+        budgeted: 50.00
+      - category: "Electronics"
+        budgeted: 50.00
+      - category: "Travel"
+        budgeted: 100.00
+      - category: "Emergency Fund"
+        budgeted: 100.00
+      - category: "Ave Marathon Funds"
+        budgeted: 10.00
+      - category: "Next Month's Budget"
+        budgeted: 2503.50
+  - parent_category: "Investments"
+    children:
+      - category: "Retirement Accounts"
+        budgeted: 600.00
+      - category: "Non-Retirement"
+        budgeted: 0.00
+  - parent_category: "Available to Budget"
+    children:
+      - category: "Available to Budget"
+        budgeted: 0.00
 ...
       
 
