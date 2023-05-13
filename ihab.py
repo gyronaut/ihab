@@ -1,7 +1,13 @@
-# import PyQt5
+import typing
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5.QtCore import QModelIndex, Qt
 import yaml
+import sys
 import sqlite3
 from sqlite3 import Error
+
+qt_designer_file = 'mainwindow.ui'
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_designer_file)
 
 def create_connection(path):
     connection = None
@@ -139,7 +145,37 @@ def make_categories_from_budget(cursor, budget):
         create_parent(cursor, parent['parent_category'])
         parent_id = cursor.execute("SELECT last_insert_rowid()").fetchone()[0]
         for child in parent['children']:
-            create_category(cursor, child['category'], parent_id, child['budgeted'])
+            create_category(cursor, child['category'], parent_id, 0.0)
+
+class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        Ui_MainWindow.__init__(self)
+        self.setupUi(self)
+        self.model = BudgetModel(budget=[{'test': 100.0}, {'other': 50.00}])
+        self.budgetView.setModel(self.model)
+
+class BudgetModel(QtCore.QAbstractTableModel):
+    def __init__(self, *args, budget=None, **kwargs):
+        super(BudgetModel, self).__init__(*args, **kwargs)
+        self.budget = budget or []
+
+    def rowCount(self, parent: QModelIndex = ...) -> int:
+        return len(self.budget)
+    
+    def columnCount(self, parent: QModelIndex = ...) -> int:
+        return len(self.budget[0])
+    
+    def data(self, index: QModelIndex, role: int = ...) -> any:
+        if role == Qt.ItemDataRole.DisplayRole:
+            #text = self.budget[index.row()][index.column()]
+            #text = self.budget[index.row()]
+            return "test"
+
+app = QtWidgets.QApplication(sys.argv)
+window = MainWindow()
+window.show()
+app.exec_()
 
 path = "./test.db"
 init_databases(path)
